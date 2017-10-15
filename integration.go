@@ -8,7 +8,7 @@ import (
 
 	"github.com/Shopify/sarama"
 	log "github.com/Sirupsen/logrus"
-	"github.com/segment-integrations/connect-kafka/internal/kafka"
+	"github.com/strydercorp/connect-kafka/internal/kafka"
 	"github.com/tj/docopt"
 )
 
