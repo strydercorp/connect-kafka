@@ -2,7 +2,7 @@
 
 This is forked from: https://github.com/segment-integrations/connect-kafka
 
-To listen on Segment webhook events, and forward them onto Kafka.
+Adopted to run on Heroku, with docker container.
 
 ## Quickstart
 
