@@ -19,6 +19,7 @@ type KafkaIntegration struct {
 }
 
 func (k *KafkaIntegration) newTLSFromConfig(m map[string]interface{}) *tls.Config {
+	// https://github.com/heroku/heroku-kafka-demo-go
 	roots := x509.NewCertPool()
 
 	// TODO(john) add .env support
