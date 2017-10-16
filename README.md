@@ -33,5 +33,5 @@ heroku container:login
 ```
 Then
 ```
-heroku container:push web -a handshake-seg2kafka-staging
+heroku container:push web
 ```
