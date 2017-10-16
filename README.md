@@ -33,6 +33,7 @@ make docker
 If you haven't logged in:
 ```
 heroku container:login
+heroku plugins:install heroku-kafka
 ```
 Then
 ```
