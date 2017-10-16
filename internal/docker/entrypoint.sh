@@ -8,7 +8,7 @@ KAFKA_TOPIC=${KAFKA_TOPIC:-segment_events}
 
 # https://github.com/segmentio/connect/blob/master/integration.go
 LISTEN_ADDRESS=:${PORT:-3000}
-echo "Will Listen at ${LISTEN_ADDRESS}"
+echo "Will Listen on ${LISTEN_ADDRESS}"
 echo ""
 
 echo "Copying Certs"
