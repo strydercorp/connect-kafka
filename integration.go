@@ -5,6 +5,7 @@ import (
 	"crypto/x509"
 	"io"
 	"io/ioutil"
+	"os"
 
 	"github.com/Shopify/sarama"
 	log "github.com/Sirupsen/logrus"
@@ -18,43 +19,31 @@ type KafkaIntegration struct {
 }
 
 func (k *KafkaIntegration) newTLSFromConfig(m map[string]interface{}) *tls.Config {
-	trustedCertPath, _ := m["--trusted-cert"].(string)
-	clientCertPath, _ := m["--client-cert"].(string)
-	clientCertKeyPath, _ := m["--client-cert-key"].(string)
+	roots := x509.NewCertPool()
 
-	if trustedCertPath == "" && clientCertPath == "" && clientCertKeyPath == "" {
-		return nil
+	// TODO(john) add .env support
+	TrustedCert := os.Getenv("KAFKA_TRUSTED_CERT")
+	ClientCert := os.Getenv("KAFKA_CLIENT_CERT")
+	ClientCertKey := os.Getenv("KAFKA_CLIENT_CERT_KEY")
+
+	ok := roots.AppendCertsFromPEM([]byte(TrustedCert))
+	if !ok {
+		log.Fatal("Unable to parse Root Cert:", TrustedCert)
 	}
 
-	trustedCertBytes, err := ioutil.ReadFile(trustedCertPath)
+	// Setup certs for Sarama
+	cert, err := tls.X509KeyPair([]byte(ClientCert), []byte(ClientCertKey))
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	clientCertBytes, err := ioutil.ReadFile(clientCertPath)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	clientCertKeyBytes, err := ioutil.ReadFile(clientCertKeyPath)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	cert, err := tls.X509KeyPair(clientCertBytes, clientCertKeyBytes)
-	if err != nil {
-		log.Fatal(err)
-	}
-	certPool := x509.NewCertPool()
-	certPool.AppendCertsFromPEM(trustedCertBytes)
 
 	tlsConfig := &tls.Config{
 		Certificates:       []tls.Certificate{cert},
 		InsecureSkipVerify: true,
-		RootCAs:            certPool,
+		RootCAs:            roots,
 	}
-	tlsConfig.BuildNameToCertificate()
 
+	tlsConfig.BuildNameToCertificate()
 	return tlsConfig
 }
 

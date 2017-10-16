@@ -26,9 +26,9 @@ for broker_url in `echo $KAFKA_URL | tr ',' ' '`; do
   CMD+=" --broker=$broker_url"
 done
 
-# CMD+=" --trusted-cert=certs/kafka_trusted_cert.cer"
-# CMD+=" --client-cert=certs/kafka_client_cert.cer"
-# CMD+=" --client-cert-key=certs/kafka_client_cert.key"
+CMD+=" --trusted-cert=certs/kafka_trusted_cert.cer"
+CMD+=" --client-cert=certs/kafka_client_cert.cer"
+CMD+=" --client-cert-key=certs/kafka_client_cert.key"
 
 echo "Executing: $CMD"
 
